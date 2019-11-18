@@ -85,15 +85,18 @@
             password: userPwd,
           },
           success: function (res) {
+            $('#myModal').modal();
+              $('.modal-body').text(res.msg);
             if (res.code == 200) {
-              $('#myModal').modal();
-              $('.modal-body').text('欢迎光临');
               //跳转到首页
-              window.location.href = './index.html';
-            } else {
-              $('#myModal').modal();
-              $('.modal-body').text('输入错误');
+              $('#myModal').on('hidden.bs.modal', function (e) {
+                window.location.href = './index.html';
+              })
             }
+            // } else {
+            //   $('#myModal').modal();
+            //   $('.modal-body').text(res.msg);
+            // }
           }
         })
 
