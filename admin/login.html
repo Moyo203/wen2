@@ -39,6 +39,29 @@
   </div>
 
 
+
+  //模态框
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">确认</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <script>
     $(function () {
       $('.input_sub').on('click', function (e) {
@@ -48,7 +71,8 @@
         var userPwd = $('.input_pass').val().trim();
         //非空判断
         if (userName == '' || userPwd == '') {
-          alert('不可为空');
+          $('#myModal').modal();
+          $('.modal-body').text('不可为空');
           return;
         }
 
@@ -62,11 +86,13 @@
           },
           success: function (res) {
             if (res.code == 200) {
-              alert('欢迎光临');
+              $('#myModal').modal();
+              $('.modal-body').text('欢迎光临');
               //跳转到首页
-              window.location.href='./index.html';
+              window.location.href = './index.html';
             } else {
-              alert('输入错误');
+              $('#myModal').modal();
+              $('.modal-body').text('输入错误');
             }
           }
         })
