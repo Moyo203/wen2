@@ -86,8 +86,10 @@
           },
           success: function (res) {
             $('#myModal').modal();
-              $('.modal-body').text(res.msg);
+            $('.modal-body').text(res.msg);
             if (res.code == 200) {
+              //存储令牌
+              window.localStorage.setItem('token',res.token);
               //跳转到首页
               $('#myModal').on('hidden.bs.modal', function (e) {
                 window.location.href = './index.html';
