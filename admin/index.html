@@ -71,6 +71,12 @@
 
                 }
             })
+        
+        //退出设置
+        $('.logout').on('click',function(){
+            window.localStorage.removeItem('token');
+            window.location.href = './login.html';
+        })
         })
 
 
