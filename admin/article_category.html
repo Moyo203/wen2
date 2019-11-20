@@ -76,7 +76,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-cancel">取消</button>
                         <button type="button" class="btn btn-primary" id="btn-confirm">确认</button>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
         <td class="text-center">
             <a href="javascript:void(0)" data-id='{{$value.id}}' data-toggle="modal" data-target="#myModal"
                 class=" btn btn-info btn-xs">编辑</a>
-            <a href="javascript:void(0)" data-id='{{$value.id}}' class="btn btn-danger btn-xs">删除</a>
+            <a href="javascript:void(0)" data-id='{{$value.id}}' class="btn btn-danger btn-xs ">删除</a>
         </td>
     </tr>
     {{/each}}
@@ -113,6 +113,11 @@
             })
         }
 
+        // $('#btn-cancel').on('click',function(){
+        //     //原生reset方法重置表单
+        //     $('.modal-body form')[0].reset();
+        // })
+
         //点击时显示模态框，触发的一个事件
         $('#myModal').on('show.bs.modal', function (e) {
             //   var el = e.relatedTarget;
@@ -120,6 +125,8 @@
             if (e.relatedTarget == $('#xinzengfenlei')[0]) {
                 $('#exampleModalLabel').text('新增文章分类');
                 $('#btn-confirm').text('新增').addClass('btn-success').removeClass('btn-primary');
+                //原生reset方法重置表单
+                $('.modal-body form')[0].reset();
             } else {
                 $('#exampleModalLabel').text('编辑文章分类');
                 $('#btn-confirm').text('编辑').addClass('btn-primary').removeClass('btn-success');
