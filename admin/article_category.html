@@ -62,6 +62,8 @@
                 </div>
                 <div class="modal-body">
                   <form>
+                      <!-- 添加隐藏域,这里用来存放id值 -->
+                      <input type="hidden" name="" id="categoryId">
                     <div class="form-group">
                       <label for="recipient-name" class="control-label">文章分类名称</label>
                       <input type="text" class="form-control" id="recipient-name">
@@ -79,15 +81,7 @@
               </div>
             </div>
           </div>
-
-
-
-
     </div>
-
-
-
-
 </body>
 <script type="text/html" id="list">
     {{each data}}
@@ -103,6 +97,8 @@
 </script>
 <script>
     $(function () {
+        getData();
+       function getData(){
         $.get({
             url: BigNew.category_list,
             success: function (res) {
@@ -110,10 +106,10 @@
                 var htmlStr = template ('list',res);
                 // console.log(htmlStr);
                 $('tbody').html(htmlStr);
-            }
-
-          
+            }        
         })
+       }
+
         //点击时显示模态框，触发的一个事件
           $('#myModal').on('show.bs.modal',function(e){
             //   var el = e.relatedTarget;
@@ -124,7 +120,59 @@
             }else{
                 $('#exampleModalLabel').text('编辑文章分类');
                 $('#btn-confirm').text('编辑').addClass('btn-primary').removeClass('btn-success');
+
+                //获取点击某个编辑按钮的ID
+                var cateId =$(e.relatedTarget).attr('data-id');
+                // console.log(cateId);
+                //获取数据
+                $.get({
+                    url:BigNew.category_search,
+                    data:{
+                        id:cateId
+                    },
+                    //渲染数据
+                    success:function(res){
+                        // console.log(res);
+                        if(res.code == 200){
+                            $('#recipient-name').val(res.data[0].name);
+                            $('#message-text').val(res.data[0].slug);
+                            $('#categoryId').val(res.data[0].id);
+
+
+                        }
+
+                    }
+                })
             }
+
+                //给按钮添加点击事件
+                $('#btn-confirm').on('click',function(){
+                    if($(this).hasClass('btn-success')){
+                        // 这是新增
+                    }else{
+                        // 这是编辑
+                    var name =  $('#recipient-name').val();
+                    var slug = $('#message-text').val();
+                    var id =  $('#categoryId').val();
+                        $.post({
+                            url:BigNew.category_edit,
+                            data:{
+                                id:id,
+                                name:name,
+                                slug:slug
+                            },
+                            success:function(res){
+                                $('#myModal').modal('hide');
+                                getData();
+
+                            }
+
+                        })
+
+
+
+                    }
+                })
 
           })  
     })
