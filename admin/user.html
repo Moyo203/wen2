@@ -97,8 +97,8 @@
         $('button.btn-edit').on('click',function(e){
             //阻止默认行为
             e.preventDefault();
-            //获取from表单
-            var from = $('#form')[0];
+            //获取form表单
+            var form = $('#form')[0];
             var userData = new FormData(form);
             //发送ajax请求
             $.post ({
