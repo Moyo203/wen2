@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="./libs/jquery-1.12.4.min.js"></script>
+    <script src="./libs/https.js"></script>
 
 </head>
 
@@ -44,7 +45,7 @@
                     <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
                     <div class="col-sm-10">
                         <img src="images/2.jpg" alt="" class="user_pic">
-                        <input style="display: block" name="userPic" type="file" id="exampleInputFile">
+                        <input style="display: none" name="userPic" type="file" id="exampleInputFile">
                         <!-- 给label标签的for属性赋值,值是input标签的id,那这样的话点击label就相当于点击了input -->
                         <br>
                         <label for="exampleInputFile">
@@ -68,6 +69,34 @@
             </form>
         </div>
     </div>
+
+    <script>
+    $(function(){
+        $.get({
+            url:BigNew.user_detail,
+            //数据渲染简化版
+            success:function(res){
+                if(res.code == 200){
+                    for(var key in res.data){
+                        $('input.'+key).val(res.data[key]);
+                    }
+                    $('.user_pic').attr('src',res.data.userPic)
+                }
+            }
+        })
+        //修改图片
+        $('#exampleInputFile').on('change',function(){
+            //将图片信息转化为URL地址
+            var imgIcon = this.files[0];
+            var url = URL.createObjectURL(imgIcon);
+            //渲染
+            $('.user_pic').attr('src',url);
+        })
+
+
+    })
+    
+    </script>
 </body>
 
 </html>
