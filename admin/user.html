@@ -92,6 +92,44 @@
             //渲染
             $('.user_pic').attr('src',url);
         })
+        
+        //修改submit注册事件
+        $('button.btn-edit').on('click',function(e){
+            //阻止默认行为
+            e.preventDefault();
+            //获取from表单
+            var from = $('#form')[0];
+            var userData = new FormData(form);
+            //发送ajax请求
+            $.post ({
+                url: BigNew.user_edit,
+                data:userData,
+                //去除请求类型
+                contentType:false,
+                //去除编码
+                processData:false,
+                success:function(res){
+                    if(res.code == 200){
+                        $.ajax({
+                                type: 'get',
+                                url: window.BigNew.user_info,
+                                success: function (res) {
+                                    //获取到返回的用户信息，在页面渲染
+                                    // parent在子页面获取到父页面的元素
+                                    parent.$('.user_info>img').attr('src', res.data.userPic);
+                                    parent.$('.user_info>span').html('欢迎&nbsp;&nbsp;' + res.data.nickname);
+                                    parent.$('.user_center_link>img').attr('src', res.data.userPic)
+
+                                    //刷新子页面
+                                    window.location.reload();
+                                }
+                            })
+                    }
+                }
+
+            })
+
+        })
 
 
     })
