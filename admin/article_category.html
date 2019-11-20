@@ -14,6 +14,7 @@
     <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
     <!-- 引入模板引擎js文件 -->
     <script src="./libs/template-web.js"></script>
+    <script src="./libs/https.js"></script>
 </head>
 
 <body>
@@ -31,14 +32,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <!-- <tr>
                         <td>奇趣事</td>
                         <td>funny</td>
                         <td class="text-center">
                             <a href="javascript:void(0)" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
                             <a href="javascript:void(0)" class="btn btn-danger btn-xs">删除</a>
                         </td>
-                    </tr>
+                    </tr> -->
                 </tbody>
                 <tfoot>
                     <tr>
@@ -50,6 +51,83 @@
                 </tfoot>
             </table>
         </div>
+
+    <!-- 添加bootstrap模态框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="exampleModalLabel">文章分类</h4>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="recipient-name" class="control-label">文章分类名称</label>
+                      <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                      <label for="message-text" class="control-label">文字分类别名</label>
+                      <textarea class="form-control" id="message-text"></textarea>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                  <button type="button" class="btn btn-primary" id="btn-confirm">确认</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
     </div>
+
+
+
+
+</body>
+<script type="text/html" id="list">
+    {{each data}}
+    <tr>
+            <td>{{$value.name}}</td>
+            <td>{{$value.slug}}</td>
+            <td class="text-center">
+                <a href="javascript:void(0)" data-id='{{$value.id}}' data-toggle="modal" data-target="#myModal" class=" btn btn-info btn-xs">编辑</a>
+                <a href="javascript:void(0)" data-id='{{$value.id}}' class="btn btn-danger btn-xs">删除</a>
+            </td>
+        </tr>
+    {{/each}}
+</script>
+<script>
+    $(function () {
+        $.get({
+            url: BigNew.category_list,
+            success: function (res) {
+                // console.log(res);
+                var htmlStr = template ('list',res);
+                // console.log(htmlStr);
+                $('tbody').html(htmlStr);
+            }
+
+          
+        })
+        //点击时显示模态框，触发的一个事件
+          $('#myModal').on('show.bs.modal',function(e){
+            //   var el = e.relatedTarget;
+            //   console.log(el);         
+            if(e.relatedTarget == $('#xinzengfenlei')[0]){
+                $('#exampleModalLabel').text('新增文章分类');
+                $('#btn-confirm').text('新增').addClass('btn-success').removeClass('btn-primary');
+            }else{
+                $('#exampleModalLabel').text('编辑文章分类');
+                $('#btn-confirm').text('编辑').addClass('btn-primary').removeClass('btn-success');
+            }
+
+          })  
+    })
+</script>
 
 </html>
