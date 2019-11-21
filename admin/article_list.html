@@ -135,19 +135,36 @@
                 var htmlStr = template('art-list', res);
                 $('tbody').html(htmlStr);
 
-                    //引入分页插件
-                    $('#pagination-demo').twbsPagination({
-                        totalPages: 50,
-                        visiblePages: 7,
-                        first: '首页',
-                        prev: '上一页',
-                        next: '下一页',
-                        last: '尾页',
-                        onPageClick: function (event, page) {
-                            //    console.log(event);
-                            // console.log(page);
-                        }
-                    });
+                //引入分页插件
+                $('#pagination-demo').twbsPagination({
+                    totalPages: res.data.totalPage,
+                    visiblePages: 7,
+                    first: '首页',
+                    prev: '上一页',
+                    next: '下一页',
+                    last: '尾页',
+                    onPageClick: function (event, page) {
+                        //    console.log(event);
+                        // console.log(page);
+                        myPage = page;
+                        $.get({
+                            url: BigNew.article_query,
+                            data: {
+                                type: $('#selCategory').val(),
+                                state: $('#selStatus').val(),
+                                page: myPage,
+                                perpage: perpage
+                            },
+                            success: function (res) {
+                                // console.log(res);
+                                var htmlStr = template('art-list', res);
+                                $('tbody').html(htmlStr);
+
+
+                            }
+                        })
+                    }
+                });
             }
         });
 
@@ -165,9 +182,17 @@
                     perpage: perpage
                 },
                 success: function (res) {
-                    var htmlStr = template('art-list', res);
-                    $('tbody').html(htmlStr);
-                
+                    if (res.code == 200 && res.data.data.length != 0) {
+                        var htmlStr = template('art-list', res);
+                        $('tbody').html(htmlStr);
+                        $('#pagination-demo').show();
+                        $('#pagination-demo').twbsPagination('changeTotalPages', res.data
+                            .totalPage, 1);
+
+                    }else{
+                        $('tbody').html('<tr><td style="text-align:center" colspan=6>这里没有数据</td></tr>');
+                        $('#pagination-demo').hide();
+                    }
 
 
                 }
