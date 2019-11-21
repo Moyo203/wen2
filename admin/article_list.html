@@ -178,7 +178,8 @@
                 data: {
                     type: $('#selCategory').val(),
                     state: $('#selStatus').val(),
-                    page: myPage,
+                    //这里设置从第一页开始
+                    page: 1,
                     perpage: perpage
                 },
                 success: function (res) {
@@ -189,14 +190,52 @@
                         $('#pagination-demo').twbsPagination('changeTotalPages', res.data
                             .totalPage, 1);
 
-                    }else{
-                        $('tbody').html('<tr><td style="text-align:center" colspan=6>这里没有数据</td></tr>');
+                    } else {
+                        $('tbody').html(
+                            '<tr><td style="text-align:center" colspan=6>这里没有数据</td></tr>'
+                        );
                         $('#pagination-demo').hide();
                     }
 
 
                 }
             });
+        })
+
+        //删除文章点击事件
+        $('tbody').on('click', '.delete', function () {
+            var deleteId = $(this).attr('data-id');
+            if (confirm('是否删除')) {
+                $.post({
+                    url: BigNew.article_delete,
+                    data: {
+                        id: deleteId
+                    },
+                    success: function (res) {
+                        // console.log(res);
+                        if (res.code == 204) {
+                            $.get({
+                                url: BigNew.article_query,
+                                data: {
+                                    type: $('#selCategory').val(),
+                                    state: $('#selStatus').val(),
+                                    page: myPage,
+                                    perpage: perpage
+                                },
+                                success: function (res) {
+                                    var htmlStr = template('art-list', res);
+                                    $('tbody').html(htmlStr);
+                                    $('#pagination-demo').twbsPagination(
+                                        'changeTotalPages', res.data
+                                        .totalPage, myPage);
+                                }
+                            })
+                        }
+
+
+                    }
+                })
+            }
         })
 
     })
