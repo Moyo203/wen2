@@ -109,7 +109,45 @@
                 var htmlStr = template('list', res);
                 $('#selCategory').html(htmlStr);
             }
+        });
+
+        // 这里是请求列表数据 
+        var myPage = 1;
+        var perpage = 10;
+        $.get({
+            url: BigNew.article_query,
+            data: {
+                type: $('#selCategory').val(),
+                state: $('#selStatus').val(),
+                page: myPage,
+                perpage: perpage
+            },
+            success: function (res) {
+                var htmlStr = template('art-list', res);
+                $('tbody').html(htmlStr);
+            }
+        });
+
+        // 筛选按钮设置点击事件
+        $('#btnSearch').on('click',function(e){
+            //阻止按钮的默认行为
+            e.preventDefault();
+
+            $.get({
+            url: BigNew.article_query,
+            data: {
+                type: $('#selCategory').val(),
+                state: $('#selStatus').val(),
+                page: myPage,
+                perpage: perpage
+            },
+            success: function (res) {
+                var htmlStr = template('art-list', res);
+                $('tbody').html(htmlStr);
+            }
+        });
         })
+
     })
 </script>
 
