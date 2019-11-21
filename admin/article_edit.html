@@ -41,11 +41,11 @@
                     <label for="inputCategory" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
                         <select class="form-control category" name="categoryId">
-                            <option>类别一</option>
+                            <!-- <option>类别一</option>
                             <option>类别二</option>
                             <option>类别三</option>
                             <option selected>类别四</option>
-                            <option>类别五</option>
+                            <option>类别五</option> -->
                         </select>
                     </div>
                 </div>
@@ -68,23 +68,54 @@
             </form>
         </div>
     </div>
+    <!-- 类别的模板引擎 -->
+
+
+    <script type="text/html" id="list">
+        {{each data}}
+        <option>{{$value.name}}</option>
+        {{/each}}
+    </script>
 
     <script>
-    $(function(){
-        var id = window.location.href.split('=')[2];
-        // console.log(id);
-        
-        $.get({
-            url:BigNew.article_search,     
-            data:{
-                id:id
-            },
-            success:function(res){
-                console.log(res);
-            },
-            
+        $(function () {
+            var id = window.location.href.split('=')[2];
+            // console.log(id);
+            //获取编辑文章的id，传递信息到界面
+            $.get({
+                url: BigNew.article_search,
+                data: {
+                    id: id
+                },
+                success: function (res) {
+                    console.log(res);
+                    if (res.code == 200) {
+                        $('#inputTitle').attr('value', res.data.title);
+                    }
+                },
+
+            })
+
+            $.get({
+            url: BigNew.category_list,
+            success: function (res) {
+                var htmlStr = template('list', res);
+                $('.category').html(htmlStr);
+            }
+        });
+
+          //修改图片
+          $('#inputCover').on('change',function(){
+            //将图片信息转化为URL地址
+            var imgIcon = this.files[0];
+            var url = URL.createObjectURL(imgIcon);
+            //渲染
+            $('.article_cover').attr('src',url);
         })
-    })
+
+
+
+        })
     </script>
 </body>
 
