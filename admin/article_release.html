@@ -14,6 +14,14 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 模板引擎 -->
     <script src="./libs/template-web.js"></script>
+    <script src="./libs/https.js"></script>
+    <!-- 时间插件css -->
+    <link rel="stylesheet" href="./libs/jedate/css/jedate.css">
+    <link rel="stylesheet" href="./libs/jedate/css/jeDate-test.css">
+    <!-- 时间js -->
+    <script src="./libs/jedate/js/jedate.js"></script>
+    <!-- 富文本编辑器的js文件 -->
+    <script src="./libs/wangEditor.js"></script>
 </head>
 
 <body>
@@ -23,10 +31,11 @@
         </div>
         <div class="container-fluid common_con">
             <form class="form-horizontal article_form" id="form">
+                <input type="hidden" name='id' id="categoryId">
                 <div class="form-group">
                     <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="text" name="title" class="form-control title" id="inputTitle" value="文章标题文字">
+                        <input type="text" name="title" class="form-control title" id="inputTitle" value="" placeholder="亲输入标题">
                     </div>
                 </div>
                 <div class="form-group">
@@ -40,22 +49,27 @@
                     <label for="inputCategory" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
                         <select class="form-control category" name="categoryId">
-                            <option>类别一</option>
+                            <!-- <option>类别一</option>
                             <option>类别二</option>
                             <option>类别三</option>
                             <option selected>类别四</option>
-                            <option>类别五</option>
+                            <option>类别五</option> -->
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">发布时间：</label>
-                    <div class="col-sm-4">
+                    <div class="jeinpbox col-sm-4">
+                        <input type="text" name='date' class="jeinput" id="testico" placeholder="YYYY-MM-DD">
+                        <div class="icons jebtns"
+                            onclick="jeDate('#testico',{zIndex:99999,trigger:false,format: 'YYYY-MM-DD'})">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
-                    <div class="col-sm-10">
+                    <div id="editor" class="col-sm-8">
+                        
                     </div>
                 </div>
                 <div class="form-group">
@@ -67,6 +81,84 @@
             </form>
         </div>
     </div>
+    <!-- 类别的模板引擎 -->
+
+
+    <script type="text/html" id="list">
+        {{each data}}
+        <option value='{{$value.id}}'>{{$value.name}}</option>
+        {{/each}}
+    </script>
+
+    <script>
+        $(function () {
+           
+            $.get({
+                url: BigNew.category_list,
+                success: function (res) {
+                    var htmlStr = template('list', res);
+                    $('.category').html(htmlStr);
+                }
+            });
+
+            //修改图片
+            $('#inputCover').on('change', function () {
+                //将图片信息转化为URL地址
+                var imgIcon = this.files[0];
+                var url = URL.createObjectURL(imgIcon);
+                //渲染
+                $('.article_cover').attr('src', url);
+            })
+
+            //时间
+            jeDate("#testico", {
+                zIndex: 99999,
+                festival: false,
+                format: 'YYYY-MM-DD',
+                isTime: true
+
+            });
+
+          //富文本编辑器
+            var E = window.wangEditor
+            var editor = new E('#editor')
+            // 或者 var editor = new E( document.getElementById('editor') )
+            editor.create()
+
+
+
+            $('.btn-release').on('click',function(e){
+                e.preventDefault();
+                var form = $('#form')[0];
+                var fd = new FormData(form);
+                //获取富文本的内容
+                fd.append('content', editor.txt.html());
+                //设置为已发布
+                fd.append('state','已发布');
+                $.post({
+                    url:BigNew.article_publish,
+                    contentType: false,
+                    processData: false,
+                    data:fd,
+                    success:function(res){
+                        // console.log(res);
+                        if(res.code == 200){
+                            window.location.href= './article_list.html';
+
+                        }
+                        
+                    }
+                })
+
+
+
+
+
+            })
+
+
+        })
+    </script>
 </body>
 
 </html>
