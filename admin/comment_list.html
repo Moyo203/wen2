@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/main.css">
   <script src="./libs/jquery-1.12.4.min.js"></script>
   <script src="./libs/template-web.js"></script>
+  <script src="./libs/https.js"></script>
 </head>
 
 <body>
@@ -160,6 +161,30 @@
 
     </div>
   </div>
+
+  <script>
+    $(function () {
+      //返回第一页
+      var mypage = 1;
+      //一页8条消息
+      var perpage = 8
+      $.get({
+        url: BigNew.comment_list,
+        data: {
+          page: mypage,
+          perpage: perpage,
+        },
+        success:function(res){
+          console.log(res);
+          
+        }
+
+
+
+      })
+
+    })
+  </script>
 </body>
 
 </html>
