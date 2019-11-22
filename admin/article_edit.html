@@ -20,8 +20,8 @@
     <link rel="stylesheet" href="./libs/jedate/css/jeDate-test.css">
     <!-- 时间js -->
     <script src="./libs/jedate/js/jedate.js"></script>
-     <!-- 富文本编辑器的js文件 -->
-     <script src="./libs/wangEditor.js"></script>
+    <!-- 富文本编辑器的js文件 -->
+    <script src="./libs/wangEditor.js"></script>
 </head>
 
 <body>
@@ -69,8 +69,8 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div id="editor" class="col-sm-8">
-                            <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
-                        </div>
+                        <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+                    </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
@@ -105,8 +105,12 @@
                     if (res.code == 200) {
                         $('#inputTitle').attr('value', res.data.title);
                         $('.article_cover').attr('src', res.data.cover);
-                        $('.category').val(res.data.categoryId);
+                        $('select.category').val(res.data.categoryId);
                         $('#categoryId').val(res.data.id);
+                        //时间
+                        $('#testico').val(res.data.date)
+                        //富文本
+                        editor.txt.html(res.data.content);
 
                     }
                 },
@@ -131,6 +135,7 @@
             })
 
 
+
             //时间
             jeDate("#testico", {
                 zIndex: 99999,
@@ -140,12 +145,69 @@
 
             });
 
-            
+
             //富文本编辑器
             var E = window.wangEditor
             var editor = new E('#editor')
             // 或者 var editor = new E( document.getElementById('editor') )
             editor.create()
+
+
+            //修改按钮点击事件
+            $('.btn-edit').on('click', function (e) {
+                //阻止默认行为
+                e.preventDefault();
+                // var form =document.querySelector('#form');
+                //获取数据
+                var form = $('#form')[0];
+                var fd = new FormData(form);
+                fd.append('content', editor.txt.html());
+                fd.append('state', '已发布');
+
+                $.post({
+                    url: BigNew.article_edit,
+                    data: fd,
+                    //有formdata就要阻止编码和取消设置头部
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        if (res.code == 200) {
+                            alert('修改成功')
+                            window.history.back();
+                        }
+                    }
+                })
+            })
+
+
+            $('.btn-draft').on('click', function (e) {
+                //阻止默认行为
+                e.preventDefault();
+                // var form =document.querySelector('#form');
+                //获取数据
+                var form = $('#form')[0];
+                var fd = new FormData(form);
+                fd.append('content', editor.txt.html());
+                //服务器设置不发布就是草稿
+                // fd.append('state', '已发布');
+
+                $.post({
+                    url: BigNew.article_edit,
+                    data: fd,
+                    //有formdata就要阻止编码和取消设置头部
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        if (res.code == 200) {
+                            alert('存档成功');
+                            window.history.back();
+                        }
+                    }
+                })
+
+            })
+
+
 
         })
     </script>
