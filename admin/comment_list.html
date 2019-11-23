@@ -72,9 +72,9 @@
       <td class="text-center">
         {{if $value.state == '待审核'}}
         <a href="javascript:void(0);;" data-id='{{$value.id}}' class="btn btn-warning btn-xs btn-pass">批准</a>
-        {{else if $value.state == '已拒绝'}}
-        <a href="javascript:void(0);;" data-id='{{$value.id}}' class="btn btn-primary btn-xs btn-deny">拒绝</a>
         {{else if $value.state == '已通过'}}
+        <a href="javascript:void(0);;" data-id='{{$value.id}}' class="btn btn-primary btn-xs btn-deny">拒绝</a>
+        {{else if $value.state == '已拒绝'}}
         <a href="javascript:void(0);;" data-id='{{$value.id}}' class="btn btn-success btn-xs btn-pass">通过</a>
         {{/if}}
         <a href="javascript:void(0);;" data-id='{{$value.id}}' class="btn btn-danger btn-xs btn-delete">删除</a>
@@ -130,6 +130,98 @@
           }
         }
       })
+   //给拒绝按钮添加点击事件
+   $('tbody').on('click', '.btn-deny', function (e) {
+        e.preventDefault();
+        var id = $(this).attr('data-id');
+        $.post({
+          url: BigNew.comment_reject,
+          data: {
+            id: id,
+          },
+          success: function (res) {
+            console.log(res);
+            $.get({
+              url: BigNew.comment_list,
+              data: {
+                page: mypage,
+                perpage: perpage,
+              },
+              success: function (res) {
+                if (res.code == 200) {
+                  // console.log(res);
+                  var htmlStr = template('comment-list', res);
+                  $('tbody').html(htmlStr);
+                }
+              }
+            })
+
+          }
+        })
+
+      })
+      //给批准按钮添加点击事件
+      $('tbody').on('click', '.btn-pass', function (e) {
+        e.preventDefault();
+        var id = $(this).attr('data-id');
+        $.post({
+          url: BigNew.comment_pass,
+          data: {
+            id: id,
+          },
+          success: function (res) {
+            // console.log(res);
+            $.get({
+              url: BigNew.comment_list,
+              data: {
+                page: mypage,
+                perpage: perpage,
+              },
+              success: function (res) {
+                if (res.code == 200) {
+                  // console.log(res);
+                  var htmlStr = template('comment-list', res);
+                  $('tbody').html(htmlStr);
+                }
+              }
+            })
+          }
+        })
+
+      })
+
+       //给删除按钮添加点击事件
+       $('tbody').on('click', '.btn-delete', function (e) {
+        e.preventDefault();
+        var id = $(this).attr('data-id');
+       if(confirm('是否删除')){
+        $.post({
+          url: BigNew.comment_delete,
+          data: {
+            id: id,
+          },
+          success: function (res) {
+            // console.log(res);
+            $.get({
+              url: BigNew.comment_list,
+              data: {
+                page: mypage,
+                perpage: perpage,
+              },
+              success: function (res) {
+                if (res.code == 200) {
+                  // console.log(res);
+                  var htmlStr = template('comment-list', res);
+                  $('tbody').html(htmlStr);
+                }
+              }
+            })
+          }
+        })
+       }
+
+      })
+
 
 
 
