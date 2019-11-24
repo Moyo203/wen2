@@ -90,60 +90,29 @@
             <div class="common_wrap">
                 <h3><i class="fa fa-bar-chart"></i> 一周热门排行</h3>
                 <ul class="content_list hotrank_list">
-                    <li><span class="first">1</span><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
+                    <!-- <li><span class="first">1</span><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
                     <li><span class="second">2</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span class="third">3</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span>4</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span>5</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
                     <li><span>6</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><span>7</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+                    <li><span>7</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li> -->
                 </ul>
             </div>
             <div class="common_wrap">
                 <h3><i class="fa fa-commenting-o"></i> 最新评论</h3>
                 <ul class="content_list comment_list">
-                    <li>
+                    <!-- <li>
                         <span>山</span>
                         <b><em>山治</em> 9个月前(08-14)说:</b>
                         <strong>挺会玩的</strong>
-                    </li>
-                    <li>
-                        <span>丽</span>
-                        <b><em>丽丽</em> 9个月前(08-14)说:9个月前(08-14)说:9个月前(08-14)说:</b>
-                        <strong>挺会玩的挺会玩的挺会玩的挺会玩的</strong>
-                    </li>
-                    <li>
-                        <span>R</span>
-                        <b><em>Rechael</em> 9个月前(08-14)说:</b>
-                        <strong>挺会玩的</strong>
-                    </li>
-                    <li>
-                        <span>J</span>
-                        <b><em>John</em> 9个月前(08-14)说:</b>
-                        <strong>挺会玩的</strong>
-                    </li>
-                    <li>
-                        <span>段</span>
-                        <b><em>段正淳</em> 9个月前(08-14)说:</b>
-                        <strong>挺会玩的</strong>
-                    </li>
-                    <li>
-                        <span>乔</span>
-                        <b><em>乔峰</em> 9个月前(08-14)说:</b>
-                        <strong>挺会玩的</strong>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <div class="common_wrap">
                 <h3><i class="fa fa-bullseye"></i> 焦点关注</h3>
                 <ul class="content_list guanzhu_list">
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-                    <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+                    <!-- <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li> -->
                 </ul>
             </div>
         </div>
@@ -197,23 +166,46 @@
     </div>
     {{/each}}
 </script>
-
+<!-- 一周排行 -->
 <script type="text/html" id="rank-list">
     {{each data as val index}}
-    <!-- <li><span class="first">1</span><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
-    <li><span class="second">2</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-    <li><span class="third">3</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li> -->
     {{if index==[0]}}
     <li><span class="first">1</span><a href="./article.html?id={{val.id}}">{{val.title}}</a></li>
     {{else if  index==[1]}}
     <li><span class="second">2</span><a href="./article.html?id={{val.id}}">{{val.title}}</a></li>
     {{else if  index==[2]}}
     <li><span class="third">3</span><a href="./article.html?id={{val.id}}">{{val.title}}</a></li>
+    {{else if  index==[3]}}
+    <li><span>4</span><a href="./article.html?id={{val.id}}">{{val.title}}</a></li>
+    {{else if  index==[4]}}
+    <li><span>5</span><a href="./article.html?id={{val.id}}">{{val.title}}</a></li>
+    {{else if  index==[5]}}
+    <li><span>6</span><a href="./article.html?id={{val.id}}">{{val.title}}</a></li>
+    {{else if  index==[6]}}
+    <li><span>7</span><a href="./article.html?id={{val.id}}">{{val.title}}</a></li>
     {{/if}}
-    <li><span>{{val.id}}</span><a href="./article.html?id={{val.id}}">{{val.title}}</a></li>
-
     {{/each}}
 </script>
+<!-- 最新评论 -->
+<script type="text/html" id="com-list">
+    {{each data}}
+    <li>
+        <span>mo</span>
+        <b><em>{{$value.author}}</em> ({{$value.date}})说:</b>
+        <strong>{{$value.intro}}</strong>
+    </li>
+    {{/each}}
+</script>
+<!-- 焦点关注 -->
+<script type="text/html" id="gz-list">
+    {{each data}}
+    <li><a href="#">{{$value.intro}}</a></li>
+    {{/each}}
+</script>
+
+
+
+
 <script>
     $(function () {
         //获取热点图数据
@@ -240,9 +232,30 @@
         $.get({
             url: 'http://localhost:8080/api/v1/index/rank',
             success: function (res) {
-                console.log(res);
+                // console.log(res);
                 var htmlStr = template('rank-list', res)
                 $('.hotrank_list').html(htmlStr);
+            }
+
+        })
+
+        //获取最新评论
+        $.get({
+            url: 'http://localhost:8080/api/v1/index/latest_comment',
+            success: function (res) {
+                // console.log(res);
+                var htmlStr = template('com-list', res)
+                $('.comment_list').html(htmlStr);
+            }
+        })
+
+         //焦点关注
+         $.get({
+            url: 'http://localhost:8080/api/v1/index/attention',
+            success: function (res) {
+                // console.log(res);
+                var htmlStr = template('gz-list', res)
+                $('.guanzhu_list').html(htmlStr);
             }
         })
     })
