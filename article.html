@@ -110,27 +110,6 @@
                         遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
                     </div>
                 </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">段</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">虚</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
-                <div class="comment_detail_list">
-                    <div class="person_pic fl">王</div>
-                    <div class="name_time fl"><b>虚竹</b><span>4小时前</span></div>
-                    <div class="comment_text fl">
-                        遏制茅台酒价格过快上涨，多渠道供给，就不一定要买，租茅台酒也可以的，租售同权。开发共有产权茅台酒，让老百姓喝得起茅台酒，饮者有其酒。
-                    </div>
-                </div>
             </div>
         </div>
         <div class="right_con setfl">
@@ -211,46 +190,105 @@
     </div>
 
 
-<!-- 文章详情 -->
+    <!-- 文章详情 -->
     <script type="text/html" id="art-list">
         <h3 class="article_title">{{data.title}}</h3>
-        <div class="article_info">{{data.author}} 发布于 {{data.date}}&nbsp;&nbsp;&nbsp;分类: {{data.category}}&nbsp;&nbsp;&nbsp;阅读:
+        <div class="article_info">{{data.author}} 发布于 {{data.date}}&nbsp;&nbsp;&nbsp;分类:
+            {{data.category}}&nbsp;&nbsp;&nbsp;阅读:
             ({{data.read}})&nbsp;&nbsp;&nbsp;评论: ({{data.comments}})</div>
         <div class="article_con">
-            <p>{{data.content}}</p>    
+            <p>{{data.content}}</p>
         </div>
     </script>
-<!-- 上一篇，下一篇 -->
-<script type="text/html" id="sx-list">
-    上一篇： <a href="./article.html?id={{data.prev.id}}">{{data.prev.title}}</a><br>
-    下一篇： <a href="./article.html?id={{data.prev.id}}">{{data.next.title}}</a>
-</script>
-<!-- 文章详情渲染 -->
+    <!-- 上一篇，下一篇 -->
+    <script type="text/html" id="sx-list">
+        上一篇： <a href="./article.html?id={{data.prev.id}}">{{data.prev.title}}</a><br>
+        下一篇： <a href="./article.html?id={{data.prev.id}}">{{data.next.title}}</a>
+    </script>
+    <script type="text/html" id="pl-list">
+        {{each data}}
+        <div class="comment_detail_list">
+            <div class="person_pic fl">乔</div>
+            <div class="name_time fl"><b>{{$value.author}}</b><span>{{$value.time}}</span></div>
+            <div class="comment_text fl">
+                {{$value.content}}
+            </div>
+        </div>
+        {{/each}}
+    </script>
     <script>
         $(function () {
             var id = window.location.href.split('=')[1];
+            //    文章详情渲染 
             $.get({
                 url: 'http://localhost:8080/api/v1/index/article',
                 data: {
                     id: id,
                 },
                 success: function (res) {
-                    console.log(res);
+                    // console.log(res);
                     var htmlStr = template('art-list', res);
-                   $('.artc').html(htmlStr);
+                    $('.artc').html(htmlStr);
 
-                   var htmlStr2 = template('sx-list', res)
-                   $('.article_links').html(htmlStr2);
+                    var htmlStr2 = template('sx-list', res)
+                    $('.article_links').html(htmlStr2);
 
                 }
             })
 
 
+            // 发表评论
+            $('.comment_sub').on('click', function (e) {
+                e.preventDefault();
+                var id = window.location.href.split('=')[1];
+                var author = $('.comment_name').val();
+                var content = $('.comment_input').val();
+                $.post({
+                    url: 'http://localhost:8080/api/v1/index/post_comment',
+                    data: {
+                        author: author,
+                        content: content,
+                        articleId: id,
+                    },
+                    success: function (res) {
+                        if (res.code == 201) {
+                            
+                            $.get({
+                                url: 'http://localhost:8080/api/v1/index/get_comment',
+                                data: {
+                                    articleId: id,
+                                },
+                                success: function (res) {
+                                    // console.log(res);
+                                    alert('发布成功');
+                                    var htmlStr = template('pl-list', res);
+                                    $('.comment_list_con').html(htmlStr);
+                                }
+                            })
+
+                        }
+                    }
+                })
+            })
+
+
+            // 评论列表
+
+            // var id = window.location.href.split('=')[1];         
+            $.get({
+                url: 'http://localhost:8080/api/v1/index/get_comment',
+                data: {
+                    articleId: id,
+                },
+                success: function (res) {
+                    // console.log(res);
+                    var htmlStr = template('pl-list', res);
+                    $('.comment_list_con').html(htmlStr);
+                }
+            })
 
 
 
-
-            
         })
     </script>
 
